@@ -1,0 +1,138 @@
+<html>
+    <head>
+        <title>Review</title>
+        <link rel="stylesheet" href="assets/css/swiper.css">
+        <link rel="stylesheet" href="assets/css/app.css">
+        <link href="http://vjs.zencdn.net/4.10/video-js.css" rel="stylesheet">
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/video.js/4.11.1/video.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/swiper.min.js"></script>
+    </head>
+    <body>
+        <section class="videoSection">
+            <video id="really-cool-video" class="video-js vjs-default-skin" preload="auto" width="100%" height="100%" poster="really-cool-video-poster.jpg" data-setup='{}'>
+            </video>
+        </section>
+        <section class="loading">
+            <div style="vertical-align: middle; display: table-cell;">
+                <img src="assets/img/loading-bubbles.svg" alt="Loading icon" width="64" height="64">
+            </div>
+        </section>
+        <section class="main-content">
+            <div class="episodes-area">
+                <div class="episodes">
+                    <a id="arrow-left" class="arrow-left arrow" href="#"></a>
+                    <a id="arrow-right" class="arrow-right arrow" href="#"></a>
+                    <div class="swiper-container">
+                        <div class="episodes-container swiper-wrapper">
+                            <div class="swiper-slide">
+                                <div class="episode">
+                                    <div class="episode-content">
+                                        <p class="episode-title">“深潜班”的定位与意义是什么？</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="episode">
+                                    <div class="episode-content">
+                                        <p class="episode-title">第2部分</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="episode">
+                                    <div class="episode-content">
+                                        <p class="episode-title">第3部分</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide">
+                                <div class="episode">
+                                    <div class="episode-content">
+                                        <p class="episode-title">第4部分</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="episodes-control">
+                    <span class="swiper-switch current"></span>
+                    <span class="swiper-switch"></span>
+                    <span class="swiper-switch"></span>
+                    <span class="swiper-switch"></span>
+                </div>
+            </div>
+            <div class="menu-area">
+                <div class="menu-icon">
+                    <img class="icreplace" src="assets/img/menu.png">
+                </div>
+            </div>
+        </section>
+        <script>
+            $(function() {
+                // 初始化
+                var $menuArea = $('.menu-area'),
+                    $episodesArea = $('.episodes-area'),
+                    $episode = $('.episode'),
+                    $loading = $('.loading'),
+                    tv = document.getElementById("pagevideo"),
+                    menuIsDisplay = false,
+                    currentIndex = 1,
+                    myPlayer = videojs('really-cool-video'),
+                    mySwiper = $('.swiper-container').swiper({
+                        mode: 'horizontal',
+                        loop: true,
+                        onSlideChangeEnd: function() {
+                            currentIndex = (mySwiper.activeIndex % 4) || 4;
+                            // 对应的 episode-control 高亮
+                            $('.swiper-switch').removeClass('current');
+                            $('.swiper-switch').eq(currentIndex - 1).addClass('current');
+                        }
+                    }),
+                    playVideo = function(index) {
+                        $loading.show().css('display', 'table');
+                        // 初始化video
+                        var videoUrl = 'http://115.28.10.1/media/' + index + '.mp4';
+                        myPlayer.src(videoUrl);
+                        myPlayer.ready(function() {
+                            $loading.hide();
+                        });
+                        myPlayer.play();
+                    };
+                $('#arrow-left').on('click', function() {
+                    mySwiper.swipePrev();
+                });
+                $('#arrow-right').on('click', function() {
+                    mySwiper.swipeNext();
+                });
+
+                $menuArea.on('click', function() {
+                    $episodesArea.stop();
+                    if (!menuIsDisplay) {
+                        $episodesArea.show().animate({'top': '0px'}, 400, 'easeInOutQuad', function() {
+                            menuIsDisplay = true;
+                        });
+                    } else {
+                        $episodesArea.animate({'top': '200px'}, 750, 'easeInOutQuad', function() {
+                            menuIsDisplay = false;
+                            $episodesArea.hide();
+                        });
+                    }
+                });
+                $('.episode').on('click', function() {
+                    $loading.show().css('display', 'table');
+                    $('.episodes-area').animate({'top': '200px'}, 750, 'easeInOutQuad', function() {
+                        menuIsDisplay = false;
+                        $episodesArea.hide();
+                    });
+                    playVideo(currentIndex);
+                });
+
+                // init for play the first
+                playVideo(currentIndex);
+            });
+        </script>
+    </body>
+</html>
