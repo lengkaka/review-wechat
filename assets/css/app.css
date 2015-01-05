@@ -11,13 +11,12 @@ body {
     overflow: hidden;
 }
 
-.wfmedia {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: auto;
-    min-height: 100%;
+.wwfmedia{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
 }
 
 .main-content {

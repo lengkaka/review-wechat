@@ -3,16 +3,18 @@
         <title>Review</title>
         <link rel="stylesheet" href="assets/css/swiper.css">
         <link rel="stylesheet" href="assets/css/app.css">
-        <link href="http://vjs.zencdn.net/4.10/video-js.css" rel="stylesheet">
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/video.js/4.11.1/video.js"></script>
+        <meta name="viewport" content="initial-scale=1.0,width=device-width,user-scalable=no">
         <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/device.js/0.1.61/device.min.js"></script>
         <script type="text/javascript" src="js/swiper.min.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
     </head>
     <body>
         <section class="videoSection">
-            <video id="really-cool-video" class="video-js vjs-default-skin" preload="auto" width="100%" height="100%" poster="really-cool-video-poster.jpg" data-setup='{}'>
-            </video>
+            <div class="wwfmedia" style="min-height: 100%; width: 100%; height: 330px; top: -50px; left: 0px;">
+                <video id="pagevideo" webkit-playsinline autoplay loop></video>
+            </div>
         </section>
         <section class="loading">
             <div style="vertical-align: middle; display: table-cell;">
@@ -70,69 +72,5 @@
                 </div>
             </div>
         </section>
-        <script>
-            $(function() {
-                // 初始化
-                var $menuArea = $('.menu-area'),
-                    $episodesArea = $('.episodes-area'),
-                    $episode = $('.episode'),
-                    $loading = $('.loading'),
-                    tv = document.getElementById("pagevideo"),
-                    menuIsDisplay = false,
-                    currentIndex = 1,
-                    myPlayer = videojs('really-cool-video'),
-                    mySwiper = $('.swiper-container').swiper({
-                        mode: 'horizontal',
-                        loop: true,
-                        onSlideChangeEnd: function() {
-                            currentIndex = (mySwiper.activeIndex % 4) || 4;
-                            // 对应的 episode-control 高亮
-                            $('.swiper-switch').removeClass('current');
-                            $('.swiper-switch').eq(currentIndex - 1).addClass('current');
-                        }
-                    }),
-                    playVideo = function(index) {
-                        $loading.show().css('display', 'table');
-                        // 初始化video
-                        var videoUrl = 'http://115.28.10.1/media/' + index + '.mp4';
-                        myPlayer.src(videoUrl);
-                        myPlayer.ready(function() {
-                            $loading.hide();
-                        });
-                        myPlayer.play();
-                    };
-                $('#arrow-left').on('click', function() {
-                    mySwiper.swipePrev();
-                });
-                $('#arrow-right').on('click', function() {
-                    mySwiper.swipeNext();
-                });
-
-                $menuArea.on('click', function() {
-                    $episodesArea.stop();
-                    if (!menuIsDisplay) {
-                        $episodesArea.show().animate({'top': '0px'}, 400, 'easeInOutQuad', function() {
-                            menuIsDisplay = true;
-                        });
-                    } else {
-                        $episodesArea.animate({'top': '200px'}, 750, 'easeInOutQuad', function() {
-                            menuIsDisplay = false;
-                            $episodesArea.hide();
-                        });
-                    }
-                });
-                $('.episode').on('click', function() {
-                    $loading.show().css('display', 'table');
-                    $('.episodes-area').animate({'top': '200px'}, 750, 'easeInOutQuad', function() {
-                        menuIsDisplay = false;
-                        $episodesArea.hide();
-                    });
-                    playVideo(currentIndex);
-                });
-
-                // init for play the first
-                playVideo(currentIndex);
-            });
-        </script>
     </body>
 </html>
